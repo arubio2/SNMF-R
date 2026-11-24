@@ -5,7 +5,7 @@ library(SNMF)
 stopifnot(!"package:GPUmatrix" %in% search())
 
 ns <- asNamespace("SNMF")
-for (name in c("as.matrix", "colSums", "mean", "rowSums", "t")) {
+for (name in c("as.matrix", "colSums", "crossprod", "mean", "rowSums", "t", "tcrossprod")) {
     generic <- methods::getGeneric(name, where = ns)
     stopifnot(!is.null(generic))
     for (class in c("gpu.matrix.torch", "gpu.matrix.tensorflow")) {

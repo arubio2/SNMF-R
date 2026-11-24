@@ -2,5 +2,5 @@
 # registers its methods when its namespace loads, without needing to export
 # the generic names itself. nrow/ncol use base's dim() dispatch.
 #' @importFrom GPUmatrix gpu.matrix
-#' @importFrom Matrix as.matrix colSums mean rowSums t
+#' @importFrom Matrix as.matrix colSums crossprod mean rowSums t tcrossprod
 NULL

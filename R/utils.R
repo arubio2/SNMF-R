@@ -25,7 +25,9 @@ safe_pmax <- function(X, eps) {
   objectClass <- class(X)[[1]]
 
   if (objectClass == "gpu.matrix.torch" || objectClass == "gpu.matrix.tensorflow") {
-    return(X + (X < eps) * (eps - X))
+    # max(X, eps) with arithmetic only: on GPUmatrix the elementwise comparison
+    # (X < eps) is ~10x slower than abs() (e.g. 84 ms vs 2 ms for 2000 x 4000).
+    return((X + eps + abs(X - eps)) / 2)
   }
 
   pmax(X, eps)

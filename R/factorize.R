@@ -118,18 +118,18 @@ factorize <- function(
 
     for (iter_init in seq_len(initial_iterations)) {
 
-      WHS_current <- W_current %*% H_current %*% S
+      WHS_current <- W_current %*% (H_current %*% S)
       WHS_current <- safe_pmax(WHS_current, R$eps)
 
       W_current <- updateW(V, W_current, H_current, S, WHS_current, R)
 
-      WHS_current <- W_current %*% H_current %*% S
+      WHS_current <- W_current %*% (H_current %*% S)
       WHS_current <- safe_pmax(WHS_current, R$eps)
 
       H_current <- updateH(V, W_current, H_current, S, WHS_current, R)
     }
 
-    V_reconstructed <- W_current %*% H_current %*% S
+    V_reconstructed <- W_current %*% (H_current %*% S)
     current_loss <- mean((V_reconstructed - V)^2)
 
     if (current_loss < best_loss) {
@@ -144,18 +144,18 @@ factorize <- function(
 
   for (iter in seq_len(niter)) {
 
-    WHS <- Winit %*% Hinit %*% S
+    WHS <- Winit %*% (Hinit %*% S)
     WHS <- safe_pmax(WHS, R$eps)
 
     Winit <- updateW(V, Winit, Hinit, S, WHS, R)
 
-    WHS <- Winit %*% Hinit %*% S
+    WHS <- Winit %*% (Hinit %*% S)
     WHS <- safe_pmax(WHS, R$eps)
 
     Hinit <- updateH(V, Winit, Hinit, S, WHS, R)
 
     if (iter %% Rupdate_iter == 0) {
-      WHS <- Winit %*% Hinit %*% S
+      WHS <- Winit %*% (Hinit %*% S)
       WHS <- safe_pmax(WHS, R$eps)
 
       R <- updateR(V, Winit, Hinit, S, WHS, R)
@@ -173,7 +173,7 @@ factorize <- function(
       Winit <- t(t(Winit) / myD)
       Hinit <- Hinit * myD
 
-      Vnew <- Winit %*% Hinit %*% S
+      Vnew <- Winit %*% (Hinit %*% S)
 
       mse_change <- mean((Vnew - Vold)^2)
 

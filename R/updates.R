@@ -36,8 +36,9 @@ updateH <- function(V, W, H, S, WHS, R) {
 
   Q <- (1 + Phi * V) / (1 + Phi * WHS)
 
-  numerator   <- t(W) %*% Rpos %*% t(S)
-  denominator <- t(W) %*% Q %*% t(S)
+  # t(W) %*% X %*% t(S) without materialising the transposes of W and S.
+  numerator   <- tcrossprod(crossprod(W, Rpos), S)
+  denominator <- tcrossprod(crossprod(W, Q), S)
 
   H.new <- H * numerator / safe_pmax(denominator, eps)
   H.new <- safe_pmax(H.new, eps)
